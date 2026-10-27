@@ -35,7 +35,8 @@ administrator). The iCUE SDK does not work through a remote Microsoft RDP sessio
 
 ## Run
 
-From the project directory:
+Follow the [official Flutter documentation for running a project locally](https://docs.flutter.dev/get-started/test-drive?tab=terminal)
+to prepare and run this project. The commands below are the project's Windows-specific run steps.
 
 ```bash
 flutter pub get
@@ -46,6 +47,8 @@ The dashboard reports whether the native DLL loaded and lets you connect to or d
 iCUE SDK session.
 
 ## Build
+
+See the [official Flutter documentation for building Windows apps](https://docs.flutter.dev/platform-integration/windows/building).
 
 ```bash
 flutter build windows
