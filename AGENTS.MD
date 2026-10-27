@@ -46,11 +46,14 @@ Observe sempre o que está definido na documentação para os cenários abaixo:
    - [docs/docs.flutter.devplatform-integration.bind-native-code.md](docs/docs.flutter.devplatform-integration.bind-native-code.md)
      - Documentação da integração do Flutter com código nativo
 2. Binários de integração do iCUE
+Arquivos binários ou dlls devem estar registrados no pubspec do projeto e terem sua cópia criadas em uma pasta se assets que possam ser registradas também ao pubspec para que sejam inclusas no build do projeto de destino.
    - [docs/iCUESDK_4.0.84/iCUESDK/lib/x64/iCUESDK.x64_2019.lib](docs/iCUESDK_4.0.84/iCUESDK/lib/x64/iCUESDK.x64_2019.lib)
    - [docs/iCUESDK_4.0.84/iCUESDK/redist/x64/iCUESDK.x64_2019.dll](docs/iCUESDK_4.0.84/iCUESDK/redist/x64/iCUESDK.x64_2019.dll)
 3. Código fonte da integração do iCUE
 Observar os arquivos em: [docs/iCUESDK_4.0.84/iCUESDK/include/iCUESDK](docs/iCUESDK_4.0.84/iCUESDK/include/iCUESDK)
-
+4. Projeto flutter de template para integrações nativas
+Observe o pacote [docs/native_add](docs/native_add) para consulta inicial de referência para a integração do flutter com código nativo..
+ 
 ## 5. Instruções e Regras Críticas para o Agente
 1. **Nunca** utilize comandos de shell (`sed`, `perl`, `python`, `rm -rf`) para editar arquivos de código diretamente. Utilize sempre as ferramentas nativas de manipulação de arquivos do IDE (`write_file`, `replace_file_content`, etc.).
 2. Siga rigorosamente a arquitetura e os padrões existentes no projeto.
