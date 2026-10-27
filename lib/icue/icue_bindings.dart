@@ -626,6 +626,203 @@ enum CorsairLedIdKeyboard {
   }
 }
 
+// --- Data Models ---
+
+class IcueException implements Exception {
+  final CorsairError error;
+  final String message;
+
+  const IcueException(this.error, this.message);
+
+  @override
+  String toString() =>
+      'IcueException: $message (Error: ${error.name}, Code: ${error.value})';
+}
+
+class IcueDevice {
+  final String id;
+  final String serial;
+  final String model;
+  final CorsairDeviceType type;
+  final int ledCount;
+  final int channelCount;
+
+  const IcueDevice({
+    required this.id,
+    required this.serial,
+    required this.model,
+    required this.type,
+    required this.ledCount,
+    required this.channelCount,
+  });
+
+  factory IcueDevice.fromNative(CorsairDeviceInfo info) {
+    return IcueDevice(
+      id: info.idString,
+      serial: info.serialString,
+      model: info.modelString,
+      type: CorsairDeviceType.fromValue(info.type),
+      ledCount: info.ledCount,
+      channelCount: info.channelCount,
+    );
+  }
+
+  bool get isDisplayDevice =>
+      type == CorsairDeviceType.cdtTouchbar ||
+      type == CorsairDeviceType.cdtCooler;
+
+  String get typeDisplayName {
+    switch (type) {
+      case CorsairDeviceType.cdtKeyboard:
+        return 'Keyboard';
+      case CorsairDeviceType.cdtMouse:
+        return 'Mouse';
+      case CorsairDeviceType.cdtMousemat:
+        return 'Mousemat';
+      case CorsairDeviceType.cdtHeadset:
+        return 'Headset';
+      case CorsairDeviceType.cdtHeadsetStand:
+        return 'Headset Stand';
+      case CorsairDeviceType.cdtFanLedController:
+        return 'Fan LED Controller';
+      case CorsairDeviceType.cdtLedController:
+        return 'LED Controller';
+      case CorsairDeviceType.cdtMemoryModule:
+        return 'Memory Module';
+      case CorsairDeviceType.cdtCooler:
+        return 'Cooler / Display';
+      case CorsairDeviceType.cdtMotherboard:
+        return 'Motherboard';
+      case CorsairDeviceType.cdtGraphicsCard:
+        return 'Graphics Card';
+      case CorsairDeviceType.cdtTouchbar:
+        return 'Touchbar / Display';
+      case CorsairDeviceType.cdtGameController:
+        return 'Game Controller';
+      case CorsairDeviceType.cdtUnknown:
+      default:
+        return 'Unknown Device';
+    }
+  }
+}
+
+class IcueVersionInfo {
+  final int major;
+  final int minor;
+  final int patch;
+
+  const IcueVersionInfo(this.major, this.minor, this.patch);
+
+  @override
+  String toString() => '$major.$minor.$patch';
+}
+
+class IcueSessionDetails {
+  final IcueVersionInfo clientVersion;
+  final IcueVersionInfo serverVersion;
+  final IcueVersionInfo serverHostVersion;
+
+  const IcueSessionDetails({
+    required this.clientVersion,
+    required this.serverVersion,
+    required this.serverHostVersion,
+  });
+}
+
+class IcueLedPosition {
+  final int id;
+  final double cx;
+  final double cy;
+
+  const IcueLedPosition({
+    required this.id,
+    required this.cx,
+    required this.cy,
+  });
+
+  factory IcueLedPosition.fromNative(CorsairLedPosition position) {
+    return IcueLedPosition(
+      id: position.id,
+      cx: position.cx,
+      cy: position.cy,
+    );
+  }
+}
+
+class IcueLedColor {
+  final int id;
+  final int r;
+  final int g;
+  final int b;
+  final int a;
+
+  const IcueLedColor({
+    required this.id,
+    required this.r,
+    required this.g,
+    required this.b,
+    this.a = 255,
+  });
+
+  factory IcueLedColor.fromNative(CorsairLedColor color) {
+    return IcueLedColor(
+      id: color.id,
+      r: color.r,
+      g: color.g,
+      b: color.b,
+      a: color.a,
+    );
+  }
+}
+
+class IcueDevicePropertyInfo {
+  final CorsairDataType dataType;
+  final int flags;
+
+  const IcueDevicePropertyInfo({
+    required this.dataType,
+    required this.flags,
+  });
+
+  bool get canRead => (flags & CorsairPropertyFlag.cpfCanRead) != 0;
+  bool get canWrite => (flags & CorsairPropertyFlag.cpfCanWrite) != 0;
+  bool get isIndexed => (flags & CorsairPropertyFlag.cpfIndexed) != 0;
+}
+
+class IcueProperty {
+  final CorsairDataType type;
+  final dynamic value;
+
+  const IcueProperty({
+    required this.type,
+    required this.value,
+  });
+}
+
+abstract class IcueEvent {}
+
+class IcueDeviceConnectionStatusChangedEvent extends IcueEvent {
+  final String deviceId;
+  final bool isConnected;
+
+  IcueDeviceConnectionStatusChangedEvent({
+    required this.deviceId,
+    required this.isConnected,
+  });
+}
+
+class IcueKeyEvent extends IcueEvent {
+  final String deviceId;
+  final CorsairMacroKeyId keyId;
+  final bool isPressed;
+
+  IcueKeyEvent({
+    required this.deviceId,
+    required this.keyId,
+    required this.isPressed,
+  });
+}
+
 // --- FFI Structs ---
 
 /// Contains information about version that consists of three components
