@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+
 import 'package:ffi/ffi.dart';
 
 // --- Constants ---
@@ -52,6 +53,7 @@ enum CorsairError {
   ceNotAllowed(7);
 
   final int value;
+
   const CorsairError(this.value);
 
   static CorsairError fromValue(int val) {
@@ -86,6 +88,7 @@ enum CorsairSessionState {
   cssConnected(6);
 
   final int value;
+
   const CorsairSessionState(this.value);
 
   static CorsairSessionState fromValue(int val) {
@@ -144,6 +147,7 @@ enum CorsairDeviceType {
   cdtAll(0xFFFFFFFF);
 
   final int value;
+
   const CorsairDeviceType(this.value);
 
   static CorsairDeviceType fromValue(int val) {
@@ -166,6 +170,7 @@ enum CorsairEventId {
   ceiKeyEvent(2);
 
   final int value;
+
   const CorsairEventId(this.value);
 
   static CorsairEventId fromValue(int val) {
@@ -201,6 +206,7 @@ enum CorsairMacroKeyId {
   cmki20(20);
 
   final int value;
+
   const CorsairMacroKeyId(this.value);
 
   static CorsairMacroKeyId fromValue(int val) {
@@ -255,6 +261,7 @@ enum CorsairDevicePropertyId {
   cdpiChannelDeviceTypeArray(13);
 
   final int value;
+
   const CorsairDevicePropertyId(this.value);
 
   static CorsairDevicePropertyId fromValue(int val) {
@@ -292,6 +299,7 @@ enum CorsairDataType {
   ctStringArray(19);
 
   final int value;
+
   const CorsairDataType(this.value);
 
   static CorsairDataType fromValue(int val) {
@@ -326,6 +334,7 @@ enum CorsairPhysicalLayout {
   cplBR(5);
 
   final int value;
+
   const CorsairPhysicalLayout(this.value);
 
   static CorsairPhysicalLayout fromValue(int val) {
@@ -359,6 +368,7 @@ enum CorsairLogicalLayout {
   cllMex(18);
 
   final int value;
+
   const CorsairLogicalLayout(this.value);
 
   static CorsairLogicalLayout fromValue(int val) {
@@ -386,6 +396,7 @@ enum CorsairChannelDeviceType {
   ccdtQxFan(12);
 
   final int value;
+
   const CorsairChannelDeviceType(this.value);
 
   static CorsairChannelDeviceType fromValue(int val) {
@@ -411,6 +422,7 @@ enum CorsairAccessLevel {
   calExclusiveLightingControlAndKeyEventsListening(3);
 
   final int value;
+
   const CorsairAccessLevel(this.value);
 
   static CorsairAccessLevel fromValue(int val) {
@@ -472,6 +484,7 @@ enum CorsairLedGroup {
   clgGameController(15);
 
   final int value;
+
   const CorsairLedGroup(this.value);
 
   static CorsairLedGroup fromValue(int val) {
@@ -616,6 +629,7 @@ enum CorsairLedIdKeyboard {
   clkFn(129);
 
   final int value;
+
   const CorsairLedIdKeyboard(this.value);
 
   static CorsairLedIdKeyboard fromValue(int val) {
@@ -628,6 +642,9 @@ enum CorsairLedIdKeyboard {
 
 // --- Data Models ---
 
+/// Exception data returned by an iCUE SDK operation.
+///
+/// [error] preserves the SDK error code and [message] provides its description.
 class IcueException implements Exception {
   final CorsairError error;
   final String message;
@@ -639,6 +656,7 @@ class IcueException implements Exception {
       'IcueException: $message (Error: ${error.name}, Code: ${error.value})';
 }
 
+/// Dart representation of a device discovered by the iCUE SDK.
 class IcueDevice {
   final String id;
   final String serial;
@@ -656,6 +674,7 @@ class IcueDevice {
     required this.channelCount,
   });
 
+  /// Creates a device description from the corresponding native SDK structure.
   factory IcueDevice.fromNative(CorsairDeviceInfo info) {
     return IcueDevice(
       id: info.idString,
@@ -667,10 +686,12 @@ class IcueDevice {
     );
   }
 
+  /// Whether this device type is treated as a display device by this app.
   bool get isDisplayDevice =>
       type == CorsairDeviceType.cdtTouchbar ||
       type == CorsairDeviceType.cdtCooler;
 
+  /// Human-readable name for [type].
   String get typeDisplayName {
     switch (type) {
       case CorsairDeviceType.cdtKeyboard:
@@ -706,6 +727,7 @@ class IcueDevice {
   }
 }
 
+/// Numeric client, server, or host version reported by the SDK.
 class IcueVersionInfo {
   final int major;
   final int minor;
@@ -717,6 +739,7 @@ class IcueVersionInfo {
   String toString() => '$major.$minor.$patch';
 }
 
+/// SDK client, SDK server, and iCUE host versions for a session.
 class IcueSessionDetails {
   final IcueVersionInfo clientVersion;
   final IcueVersionInfo serverVersion;
@@ -729,26 +752,26 @@ class IcueSessionDetails {
   });
 }
 
+/// Position of one LED in the device's reported layout.
+///
+/// [cx] and [cy] are the coordinates supplied by the SDK.
 class IcueLedPosition {
   final int id;
   final double cx;
   final double cy;
 
-  const IcueLedPosition({
-    required this.id,
-    required this.cx,
-    required this.cy,
-  });
+  const IcueLedPosition({required this.id, required this.cx, required this.cy});
 
+  /// Creates a position from the corresponding native SDK structure.
   factory IcueLedPosition.fromNative(CorsairLedPosition position) {
-    return IcueLedPosition(
-      id: position.id,
-      cx: position.cx,
-      cy: position.cy,
-    );
+    return IcueLedPosition(id: position.id, cx: position.cx, cy: position.cy);
   }
 }
 
+/// RGBA color associated with an iCUE LED identifier.
+///
+/// Each channel is represented as an 8-bit value; [a] defaults to fully
+/// opaque.
 class IcueLedColor {
   final int id;
   final int r;
@@ -764,6 +787,7 @@ class IcueLedColor {
     this.a = 255,
   });
 
+  /// Creates a color from the corresponding native SDK structure.
   factory IcueLedColor.fromNative(CorsairLedColor color) {
     return IcueLedColor(
       id: color.id,
@@ -775,32 +799,38 @@ class IcueLedColor {
   }
 }
 
+/// Data type and access flags reported for a device property.
 class IcueDevicePropertyInfo {
   final CorsairDataType dataType;
   final int flags;
 
-  const IcueDevicePropertyInfo({
-    required this.dataType,
-    required this.flags,
-  });
+  const IcueDevicePropertyInfo({required this.dataType, required this.flags});
 
+  /// Whether the SDK allows this property to be read.
   bool get canRead => (flags & CorsairPropertyFlag.cpfCanRead) != 0;
+
+  /// Whether the SDK allows this property to be written.
   bool get canWrite => (flags & CorsairPropertyFlag.cpfCanWrite) != 0;
+
+  /// Whether the property identifier addresses multiple indexed values.
   bool get isIndexed => (flags & CorsairPropertyFlag.cpfIndexed) != 0;
 }
 
+/// Typed Dart value read from or prepared for an iCUE device property.
+///
+/// The runtime type of [value] depends on [type] (for example, `bool`,
+/// `int`, `double`, `String`, or a corresponding list for array types).
 class IcueProperty {
   final CorsairDataType type;
   final dynamic value;
 
-  const IcueProperty({
-    required this.type,
-    required this.value,
-  });
+  const IcueProperty({required this.type, required this.value});
 }
 
+/// Base type for events delivered by an iCUE SDK subscription.
 abstract class IcueEvent {}
 
+/// Reports that a device was connected to or disconnected from iCUE.
 class IcueDeviceConnectionStatusChangedEvent extends IcueEvent {
   final String deviceId;
   final bool isConnected;
@@ -811,6 +841,7 @@ class IcueDeviceConnectionStatusChangedEvent extends IcueEvent {
   });
 }
 
+/// Reports a programmable G, M, or S key press or release.
 class IcueKeyEvent extends IcueEvent {
   final String deviceId;
   final CorsairMacroKeyId keyId;
@@ -888,7 +919,9 @@ final class CorsairDeviceInfo extends Struct {
   }
 
   String get idString => _readStringFromArray(id, 128);
+
   String get serialString => _readStringFromArray(serial, 128);
+
   String get modelString => _readStringFromArray(model, 128);
 }
 
@@ -1043,170 +1076,234 @@ final class CorsairKeyEventConfiguration extends Struct {
 
 // --- Callback Typedefs ---
 typedef CorsairSessionStateChangedNative = Void Function(
-    Pointer<Void> context, Pointer<CorsairSessionStateChanged> eventData);
+  Pointer<Void> context,
+  Pointer<CorsairSessionStateChanged> eventData,
+);
 typedef CorsairSessionStateChangedDart = void Function(
-    Pointer<Void> context, Pointer<CorsairSessionStateChanged> eventData);
+  Pointer<Void> context,
+  Pointer<CorsairSessionStateChanged> eventData,
+);
 
 typedef CorsairAsyncCallbackNative = Void Function(
-    Pointer<Void> context, Int32 error);
+  Pointer<Void> context,
+  Int32 error,
+);
 typedef CorsairAsyncCallbackDart = void Function(
-    Pointer<Void> context, int error);
+  Pointer<Void> context,
+  int error,
+);
 
 typedef CorsairEventHandlerNative = Void Function(
-    Pointer<Void> context, Pointer<CorsairEvent> event);
+  Pointer<Void> context,
+  Pointer<CorsairEvent> event,
+);
 typedef CorsairEventHandlerDart = void Function(
-    Pointer<Void> context, Pointer<CorsairEvent> event);
+  Pointer<Void> context,
+  Pointer<CorsairEvent> event,
+);
 
 // --- Native Function Signatures ---
 
 typedef CorsairConnectNative = Int32 Function(
-    Pointer<NativeFunction<CorsairSessionStateChangedNative>> onStateChanged,
-    Pointer<Void> context);
+  Pointer<NativeFunction<CorsairSessionStateChangedNative>> onStateChanged,
+  Pointer<Void> context,
+);
 typedef CorsairConnectDart = int Function(
-    Pointer<NativeFunction<CorsairSessionStateChangedNative>> onStateChanged,
-    Pointer<Void> context);
+  Pointer<NativeFunction<CorsairSessionStateChangedNative>> onStateChanged,
+  Pointer<Void> context,
+);
 
 typedef CorsairDisconnectNative = Int32 Function();
 typedef CorsairDisconnectDart = int Function();
 
 typedef CorsairGetSessionDetailsNative = Int32 Function(
-    Pointer<CorsairSessionDetails> details);
+  Pointer<CorsairSessionDetails> details,
+);
 typedef CorsairGetSessionDetailsDart = int Function(
-    Pointer<CorsairSessionDetails> details);
+  Pointer<CorsairSessionDetails> details,
+);
 
 typedef CorsairGetDevicesNative = Int32 Function(
-    Pointer<CorsairDeviceFilter> filter,
-    Int32 sizeMax,
-    Pointer<CorsairDeviceInfo> devices,
-    Pointer<Int32> size);
+  Pointer<CorsairDeviceFilter> filter,
+  Int32 sizeMax,
+  Pointer<CorsairDeviceInfo> devices,
+  Pointer<Int32> size,
+);
 typedef CorsairGetDevicesDart = int Function(
-    Pointer<CorsairDeviceFilter> filter,
-    int sizeMax,
-    Pointer<CorsairDeviceInfo> devices,
-    Pointer<Int32> size);
+  Pointer<CorsairDeviceFilter> filter,
+  int sizeMax,
+  Pointer<CorsairDeviceInfo> devices,
+  Pointer<Int32> size,
+);
 
 typedef CorsairGetDeviceInfoNative = Int32 Function(
-    Pointer<Utf8> deviceId, Pointer<CorsairDeviceInfo> deviceInfo);
+  Pointer<Utf8> deviceId,
+  Pointer<CorsairDeviceInfo> deviceInfo,
+);
 typedef CorsairGetDeviceInfoDart = int Function(
-    Pointer<Utf8> deviceId, Pointer<CorsairDeviceInfo> deviceInfo);
+  Pointer<Utf8> deviceId,
+  Pointer<CorsairDeviceInfo> deviceInfo,
+);
 
 typedef CorsairGetLedPositionsNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 sizeMax,
-    Pointer<CorsairLedPosition> ledPositions,
-    Pointer<Int32> size);
+  Pointer<Utf8> deviceId,
+  Int32 sizeMax,
+  Pointer<CorsairLedPosition> ledPositions,
+  Pointer<Int32> size,
+);
 typedef CorsairGetLedPositionsDart = int Function(
-    Pointer<Utf8> deviceId,
-    int sizeMax,
-    Pointer<CorsairLedPosition> ledPositions,
-    Pointer<Int32> size);
+  Pointer<Utf8> deviceId,
+  int sizeMax,
+  Pointer<CorsairLedPosition> ledPositions,
+  Pointer<Int32> size,
+);
 
 typedef CorsairSubscribeForEventsNative = Int32 Function(
-    Pointer<NativeFunction<CorsairEventHandlerNative>> onEvent,
-    Pointer<Void> context);
+  Pointer<NativeFunction<CorsairEventHandlerNative>> onEvent,
+  Pointer<Void> context,
+);
 typedef CorsairSubscribeForEventsDart = int Function(
-    Pointer<NativeFunction<CorsairEventHandlerNative>> onEvent,
-    Pointer<Void> context);
+  Pointer<NativeFunction<CorsairEventHandlerNative>> onEvent,
+  Pointer<Void> context,
+);
 
 typedef CorsairUnsubscribeFromEventsNative = Int32 Function();
 typedef CorsairUnsubscribeFromEventsDart = int Function();
 
 typedef CorsairConfigureKeyEventNative = Int32 Function(
-    Pointer<Utf8> deviceId, Pointer<CorsairKeyEventConfiguration> config);
+  Pointer<Utf8> deviceId,
+  Pointer<CorsairKeyEventConfiguration> config,
+);
 typedef CorsairConfigureKeyEventDart = int Function(
-    Pointer<Utf8> deviceId, Pointer<CorsairKeyEventConfiguration> config);
+  Pointer<Utf8> deviceId,
+  Pointer<CorsairKeyEventConfiguration> config,
+);
 
 typedef CorsairGetDevicePropertyInfoNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 propertyId,
-    Uint32 index,
-    Pointer<Int32> dataType,
-    Pointer<Uint32> flags);
+  Pointer<Utf8> deviceId,
+  Int32 propertyId,
+  Uint32 index,
+  Pointer<Int32> dataType,
+  Pointer<Uint32> flags,
+);
 typedef CorsairGetDevicePropertyInfoDart = int Function(
-    Pointer<Utf8> deviceId,
-    int propertyId,
-    int index,
-    Pointer<Int32> dataType,
-    Pointer<Uint32> flags);
+  Pointer<Utf8> deviceId,
+  int propertyId,
+  int index,
+  Pointer<Int32> dataType,
+  Pointer<Uint32> flags,
+);
 
 typedef CorsairReadDevicePropertyNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 propertyId,
-    Uint32 index,
-    Pointer<CorsairProperty> property);
+  Pointer<Utf8> deviceId,
+  Int32 propertyId,
+  Uint32 index,
+  Pointer<CorsairProperty> property,
+);
 typedef CorsairReadDevicePropertyDart = int Function(
-    Pointer<Utf8> deviceId,
-    int propertyId,
-    int index,
-    Pointer<CorsairProperty> property);
+  Pointer<Utf8> deviceId,
+  int propertyId,
+  int index,
+  Pointer<CorsairProperty> property,
+);
 
 typedef CorsairWriteDevicePropertyNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 propertyId,
-    Uint32 index,
-    Pointer<CorsairProperty> property);
+  Pointer<Utf8> deviceId,
+  Int32 propertyId,
+  Uint32 index,
+  Pointer<CorsairProperty> property,
+);
 typedef CorsairWriteDevicePropertyDart = int Function(
-    Pointer<Utf8> deviceId,
-    int propertyId,
-    int index,
-    Pointer<CorsairProperty> property);
+  Pointer<Utf8> deviceId,
+  int propertyId,
+  int index,
+  Pointer<CorsairProperty> property,
+);
 
 typedef CorsairFreePropertyNative = Int32 Function(
-    Pointer<CorsairProperty> property);
+  Pointer<CorsairProperty> property,
+);
 typedef CorsairFreePropertyDart = int Function(
-    Pointer<CorsairProperty> property);
+  Pointer<CorsairProperty> property,
+);
 
 typedef CorsairSetLedColorsNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 size,
-    Pointer<CorsairLedColor> ledColors);
+  Pointer<Utf8> deviceId,
+  Int32 size,
+  Pointer<CorsairLedColor> ledColors,
+);
 typedef CorsairSetLedColorsDart = int Function(
-    Pointer<Utf8> deviceId,
-    int size,
-    Pointer<CorsairLedColor> ledColors);
+  Pointer<Utf8> deviceId,
+  int size,
+  Pointer<CorsairLedColor> ledColors,
+);
 
 typedef CorsairSetLedColorsBufferNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 size,
-    Pointer<CorsairLedColor> ledColors);
+  Pointer<Utf8> deviceId,
+  Int32 size,
+  Pointer<CorsairLedColor> ledColors,
+);
 typedef CorsairSetLedColorsBufferDart = int Function(
-    Pointer<Utf8> deviceId,
-    int size,
-    Pointer<CorsairLedColor> ledColors);
+  Pointer<Utf8> deviceId,
+  int size,
+  Pointer<CorsairLedColor> ledColors,
+);
 
 typedef CorsairSetLedColorsFlushBufferAsyncNative = Int32 Function(
-    Pointer<NativeFunction<CorsairAsyncCallbackNative>> callback,
-    Pointer<Void> context);
+  Pointer<NativeFunction<CorsairAsyncCallbackNative>> callback,
+  Pointer<Void> context,
+);
 typedef CorsairSetLedColorsFlushBufferAsyncDart = int Function(
-    Pointer<NativeFunction<CorsairAsyncCallbackNative>> callback,
-    Pointer<Void> context);
+  Pointer<NativeFunction<CorsairAsyncCallbackNative>> callback,
+  Pointer<Void> context,
+);
 
 typedef CorsairGetLedColorsNative = Int32 Function(
-    Pointer<Utf8> deviceId,
-    Int32 size,
-    Pointer<CorsairLedColor> ledColors);
+  Pointer<Utf8> deviceId,
+  Int32 size,
+  Pointer<CorsairLedColor> ledColors,
+);
 typedef CorsairGetLedColorsDart = int Function(
-    Pointer<Utf8> deviceId,
-    int size,
-    Pointer<CorsairLedColor> ledColors);
+  Pointer<Utf8> deviceId,
+  int size,
+  Pointer<CorsairLedColor> ledColors,
+);
 
 typedef CorsairSetLayerPriorityNative = Int32 Function(Uint32 priority);
 typedef CorsairSetLayerPriorityDart = int Function(int priority);
 
 typedef CorsairGetLedLuidForKeyNameNative = Int32 Function(
-    Pointer<Utf8> deviceId, Int8 keyName, Pointer<Uint32> ledId);
+  Pointer<Utf8> deviceId,
+  Int8 keyName,
+  Pointer<Uint32> ledId,
+);
 typedef CorsairGetLedLuidForKeyNameDart = int Function(
-    Pointer<Utf8> deviceId, int keyName, Pointer<Uint32> ledId);
+  Pointer<Utf8> deviceId,
+  int keyName,
+  Pointer<Uint32> ledId,
+);
 
 typedef CorsairRequestControlNative = Int32 Function(
-    Pointer<Utf8> deviceId, Int32 accessLevel);
+  Pointer<Utf8> deviceId,
+  Int32 accessLevel,
+);
 typedef CorsairRequestControlDart = int Function(
-    Pointer<Utf8> deviceId, int accessLevel);
+  Pointer<Utf8> deviceId,
+  int accessLevel,
+);
 
 typedef CorsairReleaseControlNative = Int32 Function(Pointer<Utf8> deviceId);
 typedef CorsairReleaseControlDart = int Function(Pointer<Utf8> deviceId);
 
-/// Wrapper class for loading iCUE DLL and resolving native bindings.
+/// Loads the iCUE SDK library and resolves its C API functions.
+///
+/// The signatures and native layouts mirror Corsair's
+/// [iCUESDK.h](https://github.com/CorsairOfficial/cue-sdk/blob/v4.0.84/src/include/iCUESDK.h)
+/// from [iCUE SDK 4.0.84](https://github.com/CorsairOfficial/cue-sdk/releases/tag/v4.0.84).
+/// Calls use Dart FFI; see Flutter's
+/// [native-code integration guide](https://docs.flutter.dev/platform-integration/bind-native-code).
+/// The release's bundled native binaries target Windows; other platform
+/// library names require a compatible SDK binary to be supplied separately.
 class IcueBindings {
   late final DynamicLibrary _dylib;
 
@@ -1225,13 +1322,19 @@ class IcueBindings {
   late final CorsairFreePropertyDart corsairFreeProperty;
   late final CorsairSetLedColorsDart corsairSetLedColors;
   late final CorsairSetLedColorsBufferDart corsairSetLedColorsBuffer;
-  late final CorsairSetLedColorsFlushBufferAsyncDart corsairSetLedColorsFlushBufferAsync;
+  late final CorsairSetLedColorsFlushBufferAsyncDart
+  corsairSetLedColorsFlushBufferAsync;
   late final CorsairGetLedColorsDart corsairGetLedColors;
   late final CorsairSetLayerPriorityDart corsairSetLayerPriority;
   late final CorsairGetLedLuidForKeyNameDart corsairGetLedLuidForKeyName;
   late final CorsairRequestControlDart corsairRequestControl;
   late final CorsairReleaseControlDart corsairReleaseControl;
 
+  /// Loads the iCUE SDK dynamic library and resolves its exported functions.
+  ///
+  /// When [dllPath] is omitted, the library is selected from the platform's
+  /// default lookup locations. Loading or symbol-resolution failures are
+  /// thrown to the caller.
   IcueBindings({String? dllPath}) {
     _dylib = _openDynamicLibrary(dllPath);
 
@@ -1245,7 +1348,8 @@ class IcueBindings {
 
     corsairGetSessionDetails = _dylib
         .lookup<NativeFunction<CorsairGetSessionDetailsNative>>(
-            'CorsairGetSessionDetails')
+          'CorsairGetSessionDetails',
+        )
         .asFunction();
 
     corsairGetDevices = _dylib
@@ -1253,84 +1357,105 @@ class IcueBindings {
         .asFunction();
 
     corsairGetDeviceInfo = _dylib
-        .lookup<NativeFunction<CorsairGetDeviceInfoNative>>('CorsairGetDeviceInfo')
+        .lookup<NativeFunction<CorsairGetDeviceInfoNative>>(
+          'CorsairGetDeviceInfo',
+        )
         .asFunction();
 
     corsairGetLedPositions = _dylib
         .lookup<NativeFunction<CorsairGetLedPositionsNative>>(
-            'CorsairGetLedPositions')
+          'CorsairGetLedPositions',
+        )
         .asFunction();
 
     corsairSubscribeForEvents = _dylib
         .lookup<NativeFunction<CorsairSubscribeForEventsNative>>(
-            'CorsairSubscribeForEvents')
+          'CorsairSubscribeForEvents',
+        )
         .asFunction();
 
     corsairUnsubscribeFromEvents = _dylib
         .lookup<NativeFunction<CorsairUnsubscribeFromEventsNative>>(
-            'CorsairUnsubscribeFromEvents')
+          'CorsairUnsubscribeFromEvents',
+        )
         .asFunction();
 
     corsairConfigureKeyEvent = _dylib
         .lookup<NativeFunction<CorsairConfigureKeyEventNative>>(
-            'CorsairConfigureKeyEvent')
+          'CorsairConfigureKeyEvent',
+        )
         .asFunction();
 
     corsairGetDevicePropertyInfo = _dylib
         .lookup<NativeFunction<CorsairGetDevicePropertyInfoNative>>(
-            'CorsairGetDevicePropertyInfo')
+          'CorsairGetDevicePropertyInfo',
+        )
         .asFunction();
 
     corsairReadDeviceProperty = _dylib
         .lookup<NativeFunction<CorsairReadDevicePropertyNative>>(
-            'CorsairReadDeviceProperty')
+          'CorsairReadDeviceProperty',
+        )
         .asFunction();
 
     corsairWriteDeviceProperty = _dylib
         .lookup<NativeFunction<CorsairWriteDevicePropertyNative>>(
-            'CorsairWriteDeviceProperty')
+          'CorsairWriteDeviceProperty',
+        )
         .asFunction();
 
     corsairFreeProperty = _dylib
-        .lookup<NativeFunction<CorsairFreePropertyNative>>('CorsairFreeProperty')
+        .lookup<NativeFunction<CorsairFreePropertyNative>>(
+          'CorsairFreeProperty',
+        )
         .asFunction();
 
     corsairSetLedColors = _dylib
-        .lookup<NativeFunction<CorsairSetLedColorsNative>>('CorsairSetLedColors')
+        .lookup<NativeFunction<CorsairSetLedColorsNative>>(
+          'CorsairSetLedColors',
+        )
         .asFunction();
 
     corsairSetLedColorsBuffer = _dylib
         .lookup<NativeFunction<CorsairSetLedColorsBufferNative>>(
-            'CorsairSetLedColorsBuffer')
+          'CorsairSetLedColorsBuffer',
+        )
         .asFunction();
 
     corsairSetLedColorsFlushBufferAsync = _dylib
         .lookup<NativeFunction<CorsairSetLedColorsFlushBufferAsyncNative>>(
-            'CorsairSetLedColorsFlushBufferAsync')
+          'CorsairSetLedColorsFlushBufferAsync',
+        )
         .asFunction();
 
     corsairGetLedColors = _dylib
-        .lookup<NativeFunction<CorsairGetLedColorsNative>>('CorsairGetLedColors')
+        .lookup<NativeFunction<CorsairGetLedColorsNative>>(
+          'CorsairGetLedColors',
+        )
         .asFunction();
 
     corsairSetLayerPriority = _dylib
         .lookup<NativeFunction<CorsairSetLayerPriorityNative>>(
-            'CorsairSetLayerPriority')
+          'CorsairSetLayerPriority',
+        )
         .asFunction();
 
     corsairGetLedLuidForKeyName = _dylib
         .lookup<NativeFunction<CorsairGetLedLuidForKeyNameNative>>(
-            'CorsairGetLedLuidForKeyName')
+          'CorsairGetLedLuidForKeyName',
+        )
         .asFunction();
 
     corsairRequestControl = _dylib
         .lookup<NativeFunction<CorsairRequestControlNative>>(
-            'CorsairRequestControl')
+          'CorsairRequestControl',
+        )
         .asFunction();
 
     corsairReleaseControl = _dylib
         .lookup<NativeFunction<CorsairReleaseControlNative>>(
-            'CorsairReleaseControl')
+          'CorsairReleaseControl',
+        )
         .asFunction();
   }
 
@@ -1354,6 +1479,8 @@ class IcueBindings {
     } else if (Platform.isLinux) {
       return DynamicLibrary.open('libiCUESDK.so');
     }
-    throw UnsupportedError('Platform not supported for iCUE SDK: ${Platform.operatingSystem}');
+    throw UnsupportedError(
+      'Platform not supported for iCUE SDK: ${Platform.operatingSystem}',
+    );
   }
 }

@@ -1,10 +1,22 @@
 import 'dart:async';
 import 'dart:ffi';
+
 import 'package:ffi/ffi.dart';
+
 import '../core/result.dart';
 import 'icue_bindings.dart';
 export 'icue_bindings.dart';
 
+/// Manages the iCUE SDK connection, synchronous operations, and event streams.
+///
+/// The native SDK library is loaded when the service is created. Call
+/// [connect] before SDK operations that require an active session, subscribe
+/// with [subscribeForEvents] to receive device and key events, and call
+/// [dispose] when the service is no longer needed. State, event, and function
+/// contracts follow Corsair's [iCUESDK.h](https://github.com/CorsairOfficial/cue-sdk/blob/v4.0.84/src/include/iCUESDK.h)
+/// and the project reference in `docs/iocue-sdk.md`. A working session also
+/// requires iCUE to be running with third-party control enabled, and both
+/// processes should run with matching access rights.
 class IcueService {
   late final IcueBindings _bindings;
   bool _isConnected = false;
@@ -21,14 +33,24 @@ class IcueService {
       StreamController<IcueDeviceConnectionStatusChangedEvent>.broadcast();
   final _keyEventController = StreamController<IcueKeyEvent>.broadcast();
 
+  /// Emits session-state changes reported by the native SDK callback.
   Stream<CorsairSessionState> get onSessionStateChanged =>
       _stateController.stream;
+
+  /// Emits each supported event received from the native SDK subscription.
   Stream<IcueEvent> get onEvent => _eventController.stream;
+
+  /// Emits device connection and disconnection events.
   Stream<IcueDeviceConnectionStatusChangedEvent>
-      get onDeviceConnectionStatusChanged =>
-          _deviceConnectionController.stream;
+  get onDeviceConnectionStatusChanged => _deviceConnectionController.stream;
+
+  /// Emits programmable key press and release events.
   Stream<IcueKeyEvent> get onKeyEvent => _keyEventController.stream;
 
+  /// Creates a service and attempts to load the SDK library.
+  ///
+  /// If [dllPath] is provided, it is used as the library path. A loading
+  /// failure is exposed through [isDllLoaded] and [dllLoadError].
   IcueService({String? dllPath}) {
     try {
       _bindings = IcueBindings(dllPath: dllPath);
@@ -37,17 +59,24 @@ class IcueService {
       // Setup native session state callback listener
       _stateCallable =
           NativeCallable<CorsairSessionStateChangedNative>.listener(
-        _onStateChangedNative,
-      );
+            _onStateChangedNative,
+          );
     } catch (e) {
       _isDllLoaded = false;
       _dllLoadError = e.toString();
     }
   }
 
+  /// Whether the SDK reports an active session connection.
   bool get isConnected => _isConnected;
+
+  /// Whether the native SDK library and required symbols were loaded.
   bool get isDllLoaded => _isDllLoaded;
+
+  /// Error captured while loading the native library, if loading failed.
   String? get dllLoadError => _dllLoadError;
+
+  /// Most recently observed native session state.
   CorsairSessionState get sessionState => _sessionState;
 
   void _onStateChangedNative(
@@ -62,18 +91,16 @@ class IcueService {
     }
   }
 
-  void _onEventNative(
-    Pointer<Void> context,
-    Pointer<CorsairEvent> eventPtr,
-  ) {
+  void _onEventNative(Pointer<Void> context, Pointer<CorsairEvent> eventPtr) {
     if (eventPtr == nullptr) return;
     final eventId = CorsairEventId.fromValue(eventPtr.ref.id);
     final unionPtr = eventPtr.ref.eventDataUnion;
 
     if (eventId == CorsairEventId.ceiDeviceConnectionStatusChangedEvent &&
         unionPtr != nullptr) {
-      final statusEvt =
-          unionPtr.cast<CorsairDeviceConnectionStatusChangedEvent>().ref;
+      final statusEvt = unionPtr
+          .cast<CorsairDeviceConnectionStatusChangedEvent>()
+          .ref;
       final eventObj = IcueDeviceConnectionStatusChangedEvent(
         deviceId: statusEvt.deviceIdString,
         isConnected: statusEvt.isConnected,
@@ -92,6 +119,7 @@ class IcueService {
     }
   }
 
+  /// Returns a readable description for an SDK [error] code.
   String mapErrorDescription(CorsairError error) {
     switch (error) {
       case CorsairError.ceSuccess:
@@ -113,7 +141,10 @@ class IcueService {
     }
   }
 
-  /// 1. CorsairConnect
+  /// Opens a client session with iCUE and starts receiving state changes.
+  ///
+  /// Returns [Success] when the connection request succeeds, or [Failure]
+  /// with an [IcueException] when the library or SDK rejects it.
   Result<void, IcueException> connect() {
     if (!_isDllLoaded) {
       return Failure(
@@ -125,16 +156,20 @@ class IcueService {
     }
 
     try {
-      int errorCode =
-          _bindings.corsairConnect(_stateCallable.nativeFunction, nullptr);
+      int errorCode = _bindings.corsairConnect(
+        _stateCallable.nativeFunction,
+        nullptr,
+      );
       var error = CorsairError.fromValue(errorCode);
 
       // Self-healing: if CE_InvalidOperation occurs (orphaned session / already connected),
       // force a cleanup disconnect and retry connection once.
       if (error == CorsairError.ceInvalidOperation) {
         _bindings.corsairDisconnect();
-        errorCode =
-            _bindings.corsairConnect(_stateCallable.nativeFunction, nullptr);
+        errorCode = _bindings.corsairConnect(
+          _stateCallable.nativeFunction,
+          nullptr,
+        );
         error = CorsairError.fromValue(errorCode);
       }
 
@@ -155,7 +190,9 @@ class IcueService {
     }
   }
 
-  /// 2. CorsairDisconnect
+  /// Closes the current client session with iCUE.
+  ///
+  /// Disconnecting an already closed session is treated as success.
   Result<void, IcueException> disconnect() {
     if (!_isDllLoaded) return const Success(null);
 
@@ -186,7 +223,7 @@ class IcueService {
     }
   }
 
-  /// 3. CorsairGetSessionDetails
+  /// Reads the SDK client, SDK server, and iCUE host versions.
   Result<IcueSessionDetails, IcueException> getSessionDetails() {
     if (!_isDllLoaded) {
       return Failure(
@@ -236,7 +273,7 @@ class IcueService {
     }
   }
 
-  /// 4. CorsairGetDevices
+  /// Lists currently connected devices, optionally filtered by [filterType].
   Result<List<IcueDevice>, IcueException> getDevices({
     CorsairDeviceType filterType = CorsairDeviceType.cdtAll,
   }) {
@@ -290,7 +327,7 @@ class IcueService {
     }
   }
 
-  /// 5. CorsairGetDeviceInfo
+  /// Reads the current information for the device identified by [deviceId].
   Result<IcueDevice, IcueException> getDeviceInfo(String deviceId) {
     if (!_isDllLoaded) {
       return Failure(
@@ -305,8 +342,10 @@ class IcueService {
     final deviceInfoPtr = calloc<CorsairDeviceInfo>();
 
     try {
-      final errorCode =
-          _bindings.corsairGetDeviceInfo(deviceIdPtr, deviceInfoPtr);
+      final errorCode = _bindings.corsairGetDeviceInfo(
+        deviceIdPtr,
+        deviceInfoPtr,
+      );
       final error = CorsairError.fromValue(errorCode);
 
       if (error == CorsairError.ceSuccess) {
@@ -327,7 +366,7 @@ class IcueService {
     }
   }
 
-  /// 6. CorsairGetLedPositions
+  /// Reads up to [maxLeds] LED identifiers and layout positions for [deviceId].
   Result<List<IcueLedPosition>, IcueException> getLedPositions(
     String deviceId, {
     int maxLeds = corsairDeviceLedCountMax,
@@ -379,7 +418,10 @@ class IcueService {
     }
   }
 
-  /// 7. CorsairSubscribeForEvents
+  /// Subscribes to SDK events and forwards supported events to the streams.
+  ///
+  /// A successful subscription enables [onEvent], [onDeviceConnectionStatusChanged],
+  /// and [onKeyEvent]. The service must remain alive until unsubscribed.
   Result<void, IcueException> subscribeForEvents() {
     if (!_isDllLoaded) {
       return Failure(
@@ -417,7 +459,7 @@ class IcueService {
     }
   }
 
-  /// 8. CorsairUnsubscribeFromEvents
+  /// Stops the native event subscription and releases its callback.
   Result<void, IcueException> unsubscribeFromEvents() {
     if (!_isDllLoaded) return const Success(null);
 
@@ -443,7 +485,9 @@ class IcueService {
     }
   }
 
-  /// 9. CorsairConfigureKeyEvent
+  /// Enables or disables interception of [keyId] on [deviceId].
+  ///
+  /// Key interception may require corresponding permission in iCUE settings.
   Result<void, IcueException> configureKeyEvent(
     String deviceId,
     CorsairMacroKeyId keyId,
@@ -466,8 +510,10 @@ class IcueService {
         ..keyId = keyId.value
         ..isIntercepted = isIntercepted;
 
-      final errorCode =
-          _bindings.corsairConfigureKeyEvent(deviceIdPtr, configPtr);
+      final errorCode = _bindings.corsairConfigureKeyEvent(
+        deviceIdPtr,
+        configPtr,
+      );
       final error = CorsairError.fromValue(errorCode);
 
       if (error == CorsairError.ceSuccess) {
@@ -488,7 +534,9 @@ class IcueService {
     }
   }
 
-  /// 10. CorsairGetDevicePropertyInfo
+  /// Reads the type and access flags for a device [propertyId].
+  ///
+  /// Use [index] for properties marked as indexed by the SDK.
   Result<IcueDevicePropertyInfo, IcueException> getDevicePropertyInfo(
     String deviceId,
     CorsairDevicePropertyId propertyId, {
@@ -540,7 +588,10 @@ class IcueService {
     }
   }
 
-  /// 11. CorsairReadDeviceProperty
+  /// Reads a device property and copies its native value into Dart-managed data.
+  ///
+  /// Use [index] for indexed properties. The returned [IcueProperty] contains
+  /// a Dart value matching the property's [CorsairDataType].
   Result<IcueProperty, IcueException> readDeviceProperty(
     String deviceId,
     CorsairDevicePropertyId propertyId, {
@@ -650,7 +701,10 @@ class IcueService {
     }
   }
 
-  /// 12. CorsairWriteDeviceProperty
+  /// Writes [property] to a device property identified by [propertyId].
+  ///
+  /// The value in [property] must match its declared data type. Use [index]
+  /// for indexed properties.
   Result<void, IcueException> writeDeviceProperty(
     String deviceId,
     CorsairDevicePropertyId propertyId,
@@ -761,7 +815,10 @@ class IcueService {
     }
   }
 
-  /// 13. CorsairFreeProperty
+  /// Releases property memory allocated by the native SDK.
+  ///
+  /// A null [propertyPtr] is treated as a no-op. Values returned by
+  /// [readDeviceProperty] have already been copied and freed internally.
   Result<void, IcueException> freeProperty(
     Pointer<CorsairProperty> propertyPtr,
   ) {
@@ -796,7 +853,10 @@ class IcueService {
     }
   }
 
-  /// 14. CorsairSetLedColors
+  /// Sets [colors] on the specified LEDs of [deviceId] immediately.
+  ///
+  /// LED identifiers should be obtained from the SDK layout/key APIs. An
+  /// empty list performs no native call and succeeds.
   Result<void, IcueException> setLedColors(
     String deviceId,
     List<IcueLedColor> colors,
@@ -862,13 +922,14 @@ class IcueService {
     int b, [
     int a = 255,
   ]) {
-    return setLedColors(
-      deviceId,
-      [IcueLedColor(id: ledId, r: r, g: g, b: b, a: a)],
-    );
+    return setLedColors(deviceId, [
+      IcueLedColor(id: ledId, r: r, g: g, b: b, a: a),
+    ]);
   }
 
-  /// 15. CorsairSetLedColorsBuffer
+  /// Adds [colors] to the SDK's pending LED color buffer for [deviceId].
+  ///
+  /// Call [setLedColorsFlushBufferAsync] to submit buffered colors to devices.
   Result<void, IcueException> setLedColorsBuffer(
     String deviceId,
     List<IcueLedColor> colors,
@@ -925,7 +986,9 @@ class IcueService {
     }
   }
 
-  /// 16. CorsairSetLedColorsFlushBufferAsync
+  /// Asynchronously sends colors previously staged with [setLedColorsBuffer].
+  ///
+  /// If supplied, [callback] receives the SDK completion status.
   Result<void, IcueException> setLedColorsFlushBufferAsync([
     void Function(CorsairError error)? callback,
   ]) {
@@ -943,18 +1006,21 @@ class IcueService {
       Pointer<NativeFunction<CorsairAsyncCallbackNative>> cbFunc = nullptr;
 
       if (callback != null) {
-        callable = NativeCallable<CorsairAsyncCallbackNative>.listener(
-          (Pointer<Void> context, int errorInt) {
-            final error = CorsairError.fromValue(errorInt);
-            callback(error);
-            callable?.close();
-          },
-        );
+        callable = NativeCallable<CorsairAsyncCallbackNative>.listener((
+          Pointer<Void> context,
+          int errorInt,
+        ) {
+          final error = CorsairError.fromValue(errorInt);
+          callback(error);
+          callable?.close();
+        });
         cbFunc = callable.nativeFunction;
       }
 
-      final errorCode =
-          _bindings.corsairSetLedColorsFlushBufferAsync(cbFunc, nullptr);
+      final errorCode = _bindings.corsairSetLedColorsFlushBufferAsync(
+        cbFunc,
+        nullptr,
+      );
       final error = CorsairError.fromValue(errorCode);
 
       if (error == CorsairError.ceSuccess) {
@@ -973,7 +1039,7 @@ class IcueService {
     }
   }
 
-  /// 17. CorsairGetLedColors
+  /// Reads the current colors for [ledIds] on [deviceId].
   Result<List<IcueLedColor>, IcueException> getLedColors(
     String deviceId,
     List<int> ledIds,
@@ -1028,7 +1094,10 @@ class IcueService {
     }
   }
 
-  /// 18. CorsairSetLayerPriority
+  /// Sets the priority of the current lighting layer.
+  ///
+  /// [priority] must be within the SDK range from 0 to
+  /// [corsairLayerPriorityMax].
   Result<void, IcueException> setLayerPriority(int priority) {
     if (!_isDllLoaded) {
       return Failure(
@@ -1058,7 +1127,9 @@ class IcueService {
     }
   }
 
-  /// 19. CorsairGetLedLuidForKeyName
+  /// Resolves a keyboard key name to its device-specific LED identifier.
+  ///
+  /// The returned identifier is an SDK LED LUID suitable for LED operations.
   Result<int, IcueException> getLedLuidForKeyName(
     String deviceId,
     String keyName,
@@ -1102,7 +1173,9 @@ class IcueService {
     }
   }
 
-  /// 20. CorsairRequestControl
+  /// Requests the specified [accessLevel] for [deviceId].
+  ///
+  /// Exclusive access may be refused if another client currently owns control.
   Result<void, IcueException> requestControl(
     String deviceId,
     CorsairAccessLevel accessLevel,
@@ -1119,8 +1192,10 @@ class IcueService {
     final deviceIdPtr = deviceId.toNativeUtf8();
 
     try {
-      final errorCode =
-          _bindings.corsairRequestControl(deviceIdPtr, accessLevel.value);
+      final errorCode = _bindings.corsairRequestControl(
+        deviceIdPtr,
+        accessLevel.value,
+      );
       final error = CorsairError.fromValue(errorCode);
 
       if (error == CorsairError.ceSuccess) {
@@ -1140,7 +1215,7 @@ class IcueService {
     }
   }
 
-  /// 21. CorsairReleaseControl
+  /// Releases the control previously requested for [deviceId].
   Result<void, IcueException> releaseControl(String deviceId) {
     if (!_isDllLoaded) {
       return Failure(
@@ -1174,6 +1249,7 @@ class IcueService {
     }
   }
 
+  /// Closes event streams, releases native callbacks, and disconnects the SDK.
   void dispose() {
     _stateController.close();
     _eventController.close();

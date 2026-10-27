@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 
 import 'icue_service.dart';
 
+/// Displays iCUE SDK library and session status with a connection control.
+///
+/// The screen owns its [IcueService] instance and releases it when removed.
 class IcueDashboardScreen extends StatefulWidget {
   const IcueDashboardScreen({super.key});
 
@@ -83,7 +86,9 @@ class _IcueDashboardScreenState extends State<IcueDashboardScreen> {
         }
       },
       (error) {
-        print('Erro na conexão/desconexão do iCUE: $error');
+        if (kDebugMode) {
+          print('Erro na conexão/desconexão do iCUE: $error');
+        }
         if (mounted) {
           setState(() {
             _lastError = error.toString();
