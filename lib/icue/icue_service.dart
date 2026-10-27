@@ -41,6 +41,43 @@ class IcueDevice {
       channelCount: info.channelCount,
     );
   }
+
+  bool get isDisplayDevice =>
+      type == CorsairDeviceType.cdtTouchbar || type == CorsairDeviceType.cdtCooler;
+
+  String get typeDisplayName {
+    switch (type) {
+      case CorsairDeviceType.cdtKeyboard:
+        return 'Keyboard';
+      case CorsairDeviceType.cdtMouse:
+        return 'Mouse';
+      case CorsairDeviceType.cdtMousemat:
+        return 'Mousemat';
+      case CorsairDeviceType.cdtHeadset:
+        return 'Headset';
+      case CorsairDeviceType.cdtHeadsetStand:
+        return 'Headset Stand';
+      case CorsairDeviceType.cdtFanLedController:
+        return 'Fan LED Controller';
+      case CorsairDeviceType.cdtLedController:
+        return 'LED Controller';
+      case CorsairDeviceType.cdtMemoryModule:
+        return 'Memory Module';
+      case CorsairDeviceType.cdtCooler:
+        return 'Cooler / Display';
+      case CorsairDeviceType.cdtMotherboard:
+        return 'Motherboard';
+      case CorsairDeviceType.cdtGraphicsCard:
+        return 'Graphics Card';
+      case CorsairDeviceType.cdtTouchbar:
+        return 'Touchbar / Display';
+      case CorsairDeviceType.cdtGameController:
+        return 'Game Controller';
+      case CorsairDeviceType.cdtUnknown:
+      default:
+        return 'Unknown Device';
+    }
+  }
 }
 
 class IcueVersionInfo {
@@ -218,12 +255,12 @@ class IcueService {
     }
   }
 
-  Result<List<IcueDevice>, IcueException> getDevices() {
+  Result<List<IcueDevice>, IcueException> getDevices({CorsairDeviceType filterType = CorsairDeviceType.cdtAll}) {
     if (!_isDllLoaded) {
       return Failure(IcueException(CorsairError.ceNotConnected, 'DLL not loaded: $_dllLoadError'));
     }
 
-    final filterPtr = calloc<CorsairDeviceFilter>()..ref.deviceTypeMask = CorsairDeviceType.cdtAll.value;
+    final filterPtr = calloc<CorsairDeviceFilter>()..ref.deviceTypeMask = filterType.value;
     final sizePtr = calloc<Int32>();
     final maxDevices = corsairDeviceCountMax;
     final devicesPtr = calloc<CorsairDeviceInfo>(maxDevices);

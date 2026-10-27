@@ -60,3 +60,5 @@ Observe o pacote [docs/native_add](docs/native_add) para consulta inicial de ref
 3. Garanta que todas as alterações compilem sem erros e passem nos testes existentes.
 4. Mantenha o código limpo, documentado com comentários claros quando necessário e sem código morto.
 5. Sempre utilize a `Base de Consulta de informação local` como fonte primária da verdade.
+6. Nunca utilize números mágicos. Utilize sempre as constantes mapeadas da biblioteca.
+7. Nas widgets, sempre que houver um retorno de erro, mantenha o `print` do erro como um todo para facilitar o stack trace.
