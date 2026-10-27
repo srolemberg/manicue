@@ -1,7 +1,4 @@
-iCUE SDK  
-
-iCUE SDK
-========
+# iCUE SDK  
 
 Overview and Reference
 
@@ -10,74 +7,72 @@ Overview and Reference
 Protocol version 18
 
 Table of Contents
-=================
 
-*   [Overview](#overview)
-    *   [SDK Package](#sdk-package)
-    *   [Requirements](#requirements)
-*   [Other considerations](#other-considerations)
-    *   [LED identification](#led-identification)
-    *   [Single-color devices](#single-color-devices)
-    *   [On/off leds](#on-off-leds)
-    *   [LEDs that are not controlled by SDK](#leds-that-are-not-controlled-by-sdk)
-    *   [Transition between session states](#transition-between-session-states)
-    *   [Win+L](#win-l)
-    *   [RDP limitations](#rdp-limitations)
-    *   [Access rights](#access-rights)
-*   [Reference](#reference)
-    *   [CorsairSetLedColors](#corsairsetledcolors)
-    *   [CorsairSetLedColorsBuffer](#corsairsetledcolorsbuffer)
-    *   [CorsairSetLedColorsFlushBufferAsync](#corsairsetledcolorsflushbufferasync)
-    *   [CorsairGetDevices](#corsairgetdevices)
-    *   [CorsairGetDeviceInfo](#corsairgetdeviceinfo)
-    *   [CorsairGetDevicePropertyInfo](#corsairgetdevicepropertyinfo)
-    *   [CorsairReadDeviceProperty](#corsairreaddeviceproperty)
-    *   [CorsairWriteDeviceProperty](#corsairwritedeviceproperty)
-    *   [CorsairFreeProperty](#corsairfreeproperty)
-    *   [CorsairGetLedPositions](#corsairgetledpositions)
-    *   [CorsairGetLedLuidForKeyName](#corsairgetledluidforkeyname)
-    *   [CorsairRequestControl](#corsairrequestcontrol)
-    *   [CorsairReleaseControl](#corsairreleasecontrol)
-    *   [CorsairGetLedColors](#corsairgetledcolors)
-    *   [CorsairSetLayerPriority](#corsairsetlayerpriority)
-    *   [CorsairSubscribeForEvents](#corsairsubscribeforevents)
-    *   [CorsairUnsubscribeFromEvents](#corsairunsubscribefromevents)
-    *   [CorsairConfigureKeyEvent](#corsairconfigurekeyevent)
-    *   [CorsairConnect](#corsairconnect)
-    *   [CorsairGetSessionDetails](#corsairgetsessiondetails)
-    *   [CorsairDisconnect](#corsairdisconnect)
-    *   [CorsairLedGroup](#corsairledgroup)
-    *   [CorsairLedId\_Keyboard](#corsairledid-keyboard)
-    *   [CorsairMacroKeyId](#corsairmacrokeyid)
-    *   [CorsairDeviceType](#corsairdevicetype)
-    *   [CorsairChannelDeviceType](#corsairchanneldevicetype)
-    *   [CorsairPhysicalLayout](#corsairphysicallayout)
-    *   [CorsairLogicalLayout](#corsairlogicallayout)
-    *   [CorsairSessionState](#corsairsessionstate)
-    *   [CorsairError](#corsairerror)
-    *   [CorsairAccessLevel](#corsairaccesslevel)
-    *   [CorsairEventId](#corsaireventid)
-    *   [CorsairDevicePropertyId](#corsairdevicepropertyid)
-    *   [CorsairDataType](#corsairdatatype)
-    *   [CorsairPropertyFlag](#corsairpropertyflag)
-    *   [CorsairLedColor](#corsairledcolor)
-    *   [CorsairLedPosition](#corsairledposition)
-    *   [CorsairDeviceInfo](#corsairdeviceinfo)
-    *   [CorsairDeviceFilter](#corsairdevicefilter)
-    *   [CorsairVersion](#corsairversion)
-    *   [CorsairSessionDetails](#corsairsessiondetails)
-    *   [CorsairSessionStateChanged](#corsairsessionstatechanged)
-    *   [CorsairEvent](#corsairevent)
-    *   [CorsairDeviceConnectionStatusChangedEvent](#corsairdeviceconnectionstatuschangedevent)
-    *   [CorsairKeyEvent](#corsairkeyevent)
-    *   [CorsairKeyEventConfiguration](#corsairkeyeventconfiguration)
-    *   [CorsairDataType\_BooleanArray](#corsairdatatype-booleanarray)
-    *   [CorsairDataType\_Int32Array](#corsairdatatype-int32array)
-    *   [CorsairDataType\_Float64Array](#corsairdatatype-float64array)
-    *   [CorsairDataType\_StringArray](#corsairdatatype-stringarray)
-    *   [CorsairDataValue](#corsairdatavalue)
-    *   [CorsairProperty](#corsairproperty)
-*   [End User License Agreement](#end-user-license-agreement)
+*   [Overview](iocue-sdk.md#overview)
+    *   [SDK Package](iocue-sdk.md#sdk-package)
+    *   [Requirements](iocue-sdk.md#requirements)
+*   [Other considerations](iocue-sdk.md#other-considerations)
+    *   [LED identification](iocue-sdk.md#led-identification)
+    *   [Single-color devices](iocue-sdk.md#single-color-devices)
+    *   [On/off leds](iocue-sdk.md#onoff-leds)
+    *   [LEDs that are not controlled by SDK](iocue-sdk.md#leds-that-are-not-controlled-by-sdk)
+    *   [Transition between session states](iocue-sdk.md#transition-between-session-states)
+    *   [Win+L](iocue-sdk.md#winl)
+    *   [RDP limitations](iocue-sdk.md#rdp-limitations)
+    *   [Access rights](iocue-sdk.md#access-rights)
+*   [Reference](iocue-sdk.md#reference)
+    *   [CorsairSetLedColors](iocue-sdk.md#corsairsetledcolors)
+    *   [CorsairSetLedColorsBuffer](iocue-sdk.md#corsairsetledcolorsbuffer)
+    *   [CorsairSetLedColorsFlushBufferAsync](iocue-sdk.md#corsairsetledcolorsflushbufferasync)
+    *   [CorsairGetDevices](iocue-sdk.md#corsairgetdevices)
+    *   [CorsairGetDeviceInfo](iocue-sdk.md#corsairgetdeviceinfo)
+    *   [CorsairGetDevicePropertyInfo](iocue-sdk.md#corsairgetdevicepropertyinfo)
+    *   [CorsairReadDeviceProperty](iocue-sdk.md#corsairreaddeviceproperty)
+    *   [CorsairWriteDeviceProperty](iocue-sdk.md#corsairwritedeviceproperty)
+    *   [CorsairFreeProperty](iocue-sdk.md#corsairfreeproperty)
+    *   [CorsairGetLedPositions](iocue-sdk.md#corsairgetledpositions)
+    *   [CorsairGetLedLuidForKeyName](iocue-sdk.md#corsairgetledluidforkeyname)
+    *   [CorsairRequestControl](iocue-sdk.md#corsairrequestcontrol)
+    *   [CorsairReleaseControl](iocue-sdk.md#corsairreleasecontrol)
+    *   [CorsairGetLedColors](iocue-sdk.md#corsairgetledcolors)
+    *   [CorsairSetLayerPriority](iocue-sdk.md#corsairsetlayerpriority)
+    *   [CorsairSubscribeForEvents](iocue-sdk.md#corsairsubscribeforevents)
+    *   [CorsairUnsubscribeFromEvents](iocue-sdk.md#corsairunsubscribefromevents)
+    *   [CorsairConfigureKeyEvent](iocue-sdk.md#corsairconfigurekeyevent)
+    *   [CorsairConnect](iocue-sdk.md#corsairconnect)
+    *   [CorsairGetSessionDetails](iocue-sdk.md#corsairgetsessiondetails)
+    *   [CorsairDisconnect](iocue-sdk.md#corsairdisconnect)
+    *   [CorsairLedGroup](iocue-sdk.md#corsairledgroup)
+    *   [CorsairLedId\_Keyboard](iocue-sdk.md#corsairledid_keyboard)
+    *   [CorsairMacroKeyId](iocue-sdk.md#corsairmacrokeyid)
+    *   [CorsairDeviceType](iocue-sdk.md#corsairdevicetype)
+    *   [CorsairChannelDeviceType](iocue-sdk.md#corsairchanneldevicetype)
+    *   [CorsairPhysicalLayout](iocue-sdk.md#corsairphysicallayout)
+    *   [CorsairLogicalLayout](iocue-sdk.md#corsairlogicallayout)
+    *   [CorsairSessionState](iocue-sdk.md#corsairsessionstate)
+    *   [CorsairError](iocue-sdk.md#corsairerror)
+    *   [CorsairAccessLevel](iocue-sdk.md#corsairaccesslevel)
+    *   [CorsairEventId](iocue-sdk.md#corsaireventid)
+    *   [CorsairDevicePropertyId](iocue-sdk.md#corsairdevicepropertyid)
+    *   [CorsairDataType](iocue-sdk.md#corsairdatatype)
+    *   [CorsairPropertyFlag](iocue-sdk.md#corsairpropertyflag)
+    *   [CorsairLedColor](iocue-sdk.md#corsairledcolor)
+    *   [CorsairLedPosition](iocue-sdk.md#corsairledposition)
+    *   [CorsairDeviceInfo](iocue-sdk.md#corsairdeviceinfo)
+    *   [CorsairDeviceFilter](iocue-sdk.md#corsairdevicefilter)
+    *   [CorsairVersion](iocue-sdk.md#corsairversion)
+    *   [CorsairSessionDetails](iocue-sdk.md#corsairsessiondetails)
+    *   [CorsairSessionStateChanged](iocue-sdk.md#corsairsessionstatechanged)
+    *   [CorsairEvent](iocue-sdk.md#corsairevent)
+    *   [CorsairDeviceConnectionStatusChangedEvent](iocue-sdk.md#corsairdeviceconnectionstatuschangedevent)
+    *   [CorsairKeyEvent](iocue-sdk.md#corsairkeyevent)
+    *   [CorsairKeyEventConfiguration](iocue-sdk.md#corsairkeyeventconfiguration)
+    *   [CorsairDataType\_BooleanArray](iocue-sdk.md#corsairdatatype_booleanarray)
+    *   [CorsairDataType\_Int32Array](iocue-sdk.md#corsairdatatype_int32array)
+    *   [CorsairDataType\_Float64Array](iocue-sdk.md#corsairdatatype_float64array)
+    *   [CorsairDataType\_StringArray](iocue-sdk.md#corsairdatatype_stringarray)
+    *   [CorsairDataValue](iocue-sdk.md#corsairdatavalue)
+    *   [CorsairProperty](iocue-sdk.md#corsairproperty)
 
 Overview
 --------
@@ -149,7 +144,7 @@ Some devices have a certain number of service LED indicators (for example, WinLo
 
 Session states are represented by CorsairSessionState enumeration. SDK client starts with CSS\_Closed state. When CorsairConnect function is called, SDK sends notification that it switches to CSS\_Connecting state. From CSS\_Connecting it may end up with CSS\_Connected (if everything is ok), CSS\_Timeout (when iCUE was not found) or CSS\_ConnectionRefused (if third-party control is disabled in iCUE settings). SDK performs automatic reconnects to go from failing state back to CSS\_Connecting.
 
-![](images/states.png)
+![transition-state-machine.png](transition-state-machine.png)
 
 After transitioning to CSS\_Connected state SDK will notify client application about all connected devices by sending corresponding event for each device. After transitioning to CSS\_Closed or CSS\_ConnectionLost state SDK will notify client application that all devices have been disconnected by sending corresponding event for each device, also for all G/M/S keys which are in a pressed state at the time one of these states occurred SDK should notify client application that these keys have been released.
 
@@ -169,15 +164,17 @@ Both iCUE and SDK are designed to work on a local computer and will not work if 
 
 In order to be able to communicate with each other, iCUE and SDK client must run with identical access rights: either with regular access or "As Administrator"
 
-Reference
+# Reference
 ---------
 
 ### CorsairSetLedColors
 
+```c
 CorsairError CorsairSetLedColors(
   const CorsairDeviceId deviceId,
   int size,
-  const CorsairLedColor\* ledColors);
+  const CorsairLedColor* ledColors);
+```
 
 **Description:** sets specified LEDs to some colors. The color is retained until changed by successive calls. This function does not take logical layout into account. This function executes synchronously, if you are concerned about delays consider using CorsairSetLedColorsBuffer together with CorsairSetLedColorsFlushBufferAsync.
 
@@ -198,10 +195,12 @@ if ledColors array contains duplicates of some led ids, then color from the last
 
 ### CorsairSetLedColorsBuffer
 
+```c
 CorsairError CorsairSetLedColorsBuffer(
   const CorsairDeviceId deviceId,
   int size,
-  const CorsairLedColor\* ledColors);
+  const CorsairLedColor* ledColors);
+```
 
 **Description:** sets specified LEDs to some colors. This function sets LEDs colors in the buffer which is written to the devices via CorsairSetLedColorsFlushBufferAsync. Typical usecase is next: CorsairSetLedColorsFlushBufferAsync is called to write LEDs colors to the device and follows after one or more calls of CorsairSetLedColorsBuffer to set the LEDs buffer. This function does not take logical layout into account.
 
@@ -222,13 +221,15 @@ if ledColors array contains duplicates of some led ids, then color from the last
 
 ### CorsairSetLedColorsFlushBufferAsync
 
-typedef void(\*CorsairAsyncCallback)(
-  void \*context,
+```c
+typedef void(*CorsairAsyncCallback)(
+  void *context,
   CorsairError error);
 
 CorsairError CorsairSetLedColorsFlushBufferAsync(
   CorsairAsyncCallback callback,
-  void \*context);
+  void *context);
+```
 
 **Description:** writes to the devices LEDs colors buffer which is previously filled by the CorsairSetLedColorsBuffer function. This function executes asynchronously and returns control to the caller immediately.
 
@@ -247,11 +248,13 @@ CorsairError CorsairSetLedColorsFlushBufferAsync(
 
 ### CorsairGetDevices
 
+```c
 CorsairError CorsairGetDevices(
-  const CorsairDeviceFilter \*filter,
+  const CorsairDeviceFilter *filter,
   int sizeMax,
-  CorsairDeviceInfo \*devices,
-  int \*size);
+  CorsairDeviceInfo *devices,
+  int *size);
+```
 
 **Description:** populates the buffer with filtered collection of devices
 
@@ -271,9 +274,11 @@ CorsairError CorsairGetDevices(
 
 ### CorsairGetDeviceInfo
 
+```c
 CorsairError CorsairGetDeviceInfo(
   const CorsairDeviceId deviceId,
-  CorsairDeviceInfo \*deviceInfo);
+  CorsairDeviceInfo *deviceInfo);
+```
 
 **Description:** gets information about device specified by deviceId
 
@@ -291,12 +296,14 @@ CorsairError CorsairGetDeviceInfo(
 
 ### CorsairGetDevicePropertyInfo
 
+```c
 CorsairError CorsairGetDevicePropertyInfo(
   const CorsairDeviceId deviceId,
   CorsairDevicePropertyId propertyId,
   unsigned int index,
-  CorsairDataType \*dataType,
-  unsigned int \*flags);
+  CorsairDataType *dataType,
+  unsigned int *flags);
+```
 
 **Description:** gets information about device property for the device specified by deviceId
 
@@ -318,11 +325,13 @@ CorsairError CorsairGetDevicePropertyInfo(
 
 ### CorsairReadDeviceProperty
 
+```c
 CorsairError CorsairReadDeviceProperty(
   const CorsairDeviceId deviceId,
   CorsairDevicePropertyId propertyId,
   unsigned int index,
-  CorsairProperty \*property);
+  CorsairProperty *property);
+```
 
 **Description:** gets the data of device property by device identifier, property identifier and property index
 
@@ -343,11 +352,13 @@ CorsairError CorsairReadDeviceProperty(
 
 ### CorsairWriteDeviceProperty
 
+```c
 CorsairError CorsairWriteDeviceProperty(
   const CorsairDeviceId deviceId,
   CorsairDevicePropertyId propertyId,
   unsigned int index,
-  const CorsairProperty \*property);
+  const CorsairProperty *property);
+```
 
 **Description:** sets the data of device property by device identifier, property identifier and property index. Can be called only with writable properties
 
@@ -368,7 +379,9 @@ CorsairError CorsairWriteDeviceProperty(
 
 ### CorsairFreeProperty
 
-CorsairError CorsairFreeProperty(CorsairProperty \*property);
+```c
+CorsairError CorsairFreeProperty(CorsairProperty *property);
+```
 
 **Description:** frees memory occupied by CorsairProperty instance
 
@@ -382,11 +395,13 @@ CorsairError CorsairFreeProperty(CorsairProperty \*property);
 
 ### CorsairGetLedPositions
 
+```c
 CorsairError CorsairGetLedPositions(
   const CorsairDeviceId deviceId,
   int sizeMax,
-  CorsairLedPosition \*ledPositions,
-  int \*size);
+  CorsairLedPosition *ledPositions,
+  int *size);
+```
 
 **Description:** provides a list of supported device LEDs by its id with their positions. Position could be either physical (only device-dependent) or logical (depend on device as well as iCUE settings).
 
@@ -406,10 +421,12 @@ CorsairError CorsairGetLedPositions(
 
 ### CorsairGetLedLuidForKeyName
 
+```c
 CorsairError CorsairGetLedLuidForKeyName(
   const CorsairDeviceId deviceId,
   char keyName,
-  CorsairLedLuid \*luid);
+  CorsairLedLuid *luid);
+```
 
 **Description:** retrieves LED luid for key name taking logical layout into account. So on AZERTY keyboards if user calls CorsairGetLedLuidForKeyName(deviceId, 'A', &luid) he gets luid with CLK\_Q code. This luid can be used in CorsairSetLedColors or CorsairSetLedColorsBuffer function
 
@@ -428,9 +445,11 @@ CorsairError CorsairGetLedLuidForKeyName(
 
 ### CorsairRequestControl
 
+```c
 CorsairError CorsairRequestControl(
   const CorsairDeviceId deviceId,
   CorsairAccessLevel accessLevel);
+```
 
 **Description:** requests control using specified access level. By default client has shared control over lighting and events so there is no need to call CorsairRequestControl() unless client requires exclusive control
 
@@ -449,7 +468,9 @@ Possible errors:
 
 ### CorsairReleaseControl
 
+```c
 CorsairError CorsairReleaseControl(const CorsairDeviceId deviceId);
+```
 
 **Description:** releases previously requested control for specified device. This action resets access level to default (shared)
 
@@ -468,10 +489,12 @@ CorsairError CorsairReleaseControl(const CorsairDeviceId deviceId);
 
 ### CorsairGetLedColors
 
+```c
 CorsairError CorsairGetLedColors(
   const CorsairDeviceId deviceId,
   int size,
-  CorsairLedColor\* ledColors);
+  CorsairLedColor* ledColors);
+```
 
 **Description:** get current color for the list of requested LEDs of supported device. The color should represent the actual state of the hardware LED, which could be a combination of SDK and/or iCUE input.
 
@@ -490,7 +513,9 @@ CorsairError CorsairGetLedColors(
 
 ### CorsairSetLayerPriority
 
+```c
 CorsairError CorsairSetLayerPriority(unsigned int priority);
+```
 
 **Description:** set layer priority for this shared client. By default iCUE has priority of 127 and all shared clients have priority of 128 if they don't call this function. Layers with higher priority value are shown on top of layers with lower priority.
 
@@ -507,13 +532,15 @@ CorsairError CorsairSetLayerPriority(unsigned int priority);
 
 ### CorsairSubscribeForEvents
 
-typedef void(\*CorsairEventHandler)(
-  void \*context,
-  const CorsairEvent \*event);
+```c
+typedef void(*CorsairEventHandler)(
+  void *context,
+  const CorsairEvent *event);
 
 CorsairError CorsairSubscribeForEvents(
   CorsairEventHandler onEvent,
-  void \*context);
+  void *context);
+```
 
 **Description:** registers a callback that will be called by SDK when some event happened. If client is already subscribed but calls this function again SDK should use only last callback registered for sending notifications
 
@@ -533,7 +560,9 @@ CorsairError CorsairSubscribeForEvents(
 
 ### CorsairUnsubscribeFromEvents
 
+```c
 CorsairError CorsairUnsubscribeFromEvents();
+```
 
 **Description:** unregisters callback previously registered by CorsairSubscribeForEvents call
 
@@ -547,9 +576,11 @@ CorsairError CorsairUnsubscribeFromEvents();
 
 ### CorsairConfigureKeyEvent
 
+```c
 CorsairError CorsairConfigureKeyEvent(
   const CorsairDeviceId deviceId,
-  const CorsairKeyEventConfiguration \*config);
+  const CorsairKeyEventConfiguration *config);
+```
 
 **Description:** asks iCUE to send a key event from the device specified by deviceId to an exclusive SDK client only (if config->isIntercepted == true) or to all SDK clients including active exclusive client (if config->isIntercepted == false). Effective only for SDK clients with ExclusiveKeyEventsListening or ExclusiveLightingControlAndKeyEventsListening access level (see CorsairRequestControl). This function gives possibility for a client with ExclusiveKeyEventsListening or ExclusiveLightingControlAndKeyEventsListening access level to control selected set of macro keys only and let iCUE to pass some key events to other shared clients
 
@@ -570,13 +601,15 @@ CorsairError CorsairConfigureKeyEvent(
 
 ### CorsairConnect
 
-typedef void(\*CorsairSessionStateChangedHandler)(
-  void \*context,
-  const CorsairSessionStateChanged \*eventData);
+```c
+typedef void(*CorsairSessionStateChangedHandler)(
+  void *context,
+  const CorsairSessionStateChanged *eventData);
 
 CorsairError CorsairConnect(
   CorsairSessionStateChangedHandler onStateChanged,
-  void \*context);
+  void *context);
+```
 
 **Description:** sets handler for session state changes, checks versions of SDK client, server and host (iCUE) to understand which of SDK functions can be used with this version of iCUE
 
@@ -598,8 +631,10 @@ CorsairSessionStateChangedHandler onStateChanged - callback that is called by SD
 
 ### CorsairGetSessionDetails
 
+```c
 CorsairError CorsairGetSessionDetails(
-  CorsairSessionDetails\* details);
+  CorsairSessionDetails* details);
+```
 
 **Description:** checks versions of SDK client, server and host (iCUE) to understand which of SDK functions can be used with this version of iCUE. If there is no active session or client is not connected to the server, then only client version will be filled
 
@@ -615,7 +650,9 @@ CE\_InvalidArguments - if details is NULL
 
 ### CorsairDisconnect
 
+```c
 CorsairError CorsairDisconnect();
+```
 
 **Description:** removes handler for session state changes previously set by CorsairConnect
 
@@ -631,7 +668,9 @@ CorsairError CorsairDisconnect();
 
 ### CorsairLedGroup
 
+```c
 enum CorsairLedGroup
+```
 
 **Description:** contains a list of led groups. Led group is used as a part of led identifier
 
@@ -656,7 +695,9 @@ enum CorsairLedGroup
 
 ### CorsairLedId\_Keyboard
 
-enum CorsairLedId\_Keyboard
+```c
+enum CorsairLedId_Keyboard
+```
 
 **Description:** contains a list of keyboard leds that belong to CLG\_Keyboard group
 
@@ -667,7 +708,9 @@ enum CorsairLedId\_Keyboard
 
 ### CorsairMacroKeyId
 
+```c
 enum CorsairMacroKeyId
+```
 
 **Description:** contains a shared list of G, M and S keys (not all available keys!)
 
@@ -678,7 +721,9 @@ enum CorsairMacroKeyId
 
 ### CorsairDeviceType
 
+```c
 enum CorsairDeviceType
+```
 
 **Description:** contains list of available device types
 
@@ -702,7 +747,9 @@ enum CorsairDeviceType
 
 ### CorsairChannelDeviceType
 
+```c
 enum CorsairChannelDeviceType
+```
 
 **Description:** contains list of the LED-devices which can be connected to the DIY-device, memory module or cooler.
 
@@ -713,7 +760,9 @@ enum CorsairChannelDeviceType
 
 ### CorsairPhysicalLayout
 
+```c
 enum CorsairPhysicalLayout
+```
 
 **Description:** contains list of available physical layouts for keyboards
 
@@ -724,7 +773,9 @@ enum CorsairPhysicalLayout
 
 ### CorsairLogicalLayout
 
+```c
 enum CorsairLogicalLayout
+```
 
 **Description:** contains list of available logical layouts for keyboards
 
@@ -735,7 +786,9 @@ enum CorsairLogicalLayout
 
 ### CorsairSessionState
 
+```c
 enum CorsairSessionState
+```
 
 **Description:** contains a list of all possible session states
 
@@ -751,7 +804,9 @@ enum CorsairSessionState
 
 ### CorsairError
 
+```c
 enum CorsairError
+```
 
 **Description:** contains shared list of all errors which could happen during calling of Corsair\* functions
 
@@ -768,7 +823,9 @@ enum CorsairError
 
 ### CorsairAccessLevel
 
+```c
 enum CorsairAccessLevel
+```
 
 **Description:** contains list of available SDK access levels
 
@@ -781,7 +838,9 @@ enum CorsairAccessLevel
 
 ### CorsairEventId
 
+```c
 enum CorsairEventId
+```
 
 **Description:** contains list of event identifiers
 
@@ -792,7 +851,9 @@ enum CorsairEventId
 
 ### CorsairDevicePropertyId
 
+```c
 enum CorsairDevicePropertyId
+```
 
 **Description:** contains list of properties identifiers which can be read from device.
 
@@ -815,7 +876,9 @@ enum CorsairDevicePropertyId
 
 ### CorsairDataType
 
+```c
 enum CorsairDataType
+```
 
 **Description:** contains list of available property types
 
@@ -832,7 +895,9 @@ enum CorsairDataType
 
 ### CorsairPropertyFlag
 
+```c
 enum CorsairPropertyFlag
+```
 
 **Description:** contains list of operations that can be applied to the property
 
@@ -845,7 +910,9 @@ enum CorsairPropertyFlag
 
 ### CorsairLedColor
 
+```c
 struct CorsairLedColor
+```
 
 **Description:** contains information about LED and its color
 
@@ -859,7 +926,9 @@ struct CorsairLedColor
 
 ### CorsairLedPosition
 
+```c
 struct CorsairLedPosition
+```
 
 **Description:** contains led id and position of led.
 
@@ -870,7 +939,9 @@ struct CorsairLedPosition
 
 ### CorsairDeviceInfo
 
+```c
 struct CorsairDeviceInfo
+```
 
 **Description:** contains information about device
 
@@ -885,7 +956,9 @@ struct CorsairDeviceInfo
 
 ### CorsairDeviceFilter
 
+```c
 struct CorsairDeviceFilter
+```
 
 **Description:** contains device search filter.
 
@@ -895,7 +968,9 @@ struct CorsairDeviceFilter
 
 ### CorsairVersion
 
+```c
 struct CorsairVersion
+```
 
 **Description:** contains information about version that consists of three components
 
@@ -907,7 +982,9 @@ struct CorsairVersion
 
 ### CorsairSessionDetails
 
+```c
 struct CorsairSessionDetails
+```
 
 **Description:** contains information about SDK and iCUE versions
 
@@ -919,7 +996,9 @@ struct CorsairSessionDetails
 
 ### CorsairSessionStateChanged
 
+```c
 struct CorsairSessionStateChanged
+```
 
 **Description:** contains information about session state and client/server versions
 
@@ -930,7 +1009,9 @@ struct CorsairSessionStateChanged
 
 ### CorsairEvent
 
+```c
 struct CorsairEvent
+```
 
 **Description:** contains information about event id and event data
 
@@ -945,7 +1026,9 @@ struct CorsairEvent
 
 ### CorsairDeviceConnectionStatusChangedEvent
 
+```c
 struct CorsairDeviceConnectionStatusChangedEvent
+```
 
 **Description:** contains information about device that was connected or disconnected
 
@@ -956,7 +1039,9 @@ struct CorsairDeviceConnectionStatusChangedEvent
 
 ### CorsairKeyEvent
 
+```c
 struct CorsairKeyEvent
+```
 
 **Description:** contains information about device where G, M or S key was pressed/released and the key itself
 
@@ -968,7 +1053,9 @@ struct CorsairKeyEvent
 
 ### CorsairKeyEventConfiguration
 
+```c
 struct CorsairKeyEventConfiguration
+```
 
 **Description:** contains information about key event configuration
 
@@ -979,7 +1066,9 @@ struct CorsairKeyEventConfiguration
 
 ### CorsairDataType\_BooleanArray
 
-struct CorsairDataType\_BooleanArray
+```c
+struct CorsairDataType_BooleanArray
+```
 
 **Description:** represents an array of boolean values
 
@@ -990,7 +1079,9 @@ struct CorsairDataType\_BooleanArray
 
 ### CorsairDataType\_Int32Array
 
-struct CorsairDataType\_Int32Array
+```c
+struct CorsairDataType_Int32Array
+```
 
 **Description:** represents an array of integer values
 
@@ -1001,7 +1092,9 @@ struct CorsairDataType\_Int32Array
 
 ### CorsairDataType\_Float64Array
 
-struct CorsairDataType\_Float64Array
+```c
+struct CorsairDataType_Float64Array
+```
 
 **Description:** represents an array of double values
 
@@ -1012,7 +1105,9 @@ struct CorsairDataType\_Float64Array
 
 ### CorsairDataType\_StringArray
 
-struct CorsairDataType\_StringArray
+```c
+struct CorsairDataType_StringArray
+```
 
 **Description:** represents an array of pointers to null terminated strings
 
@@ -1023,7 +1118,9 @@ struct CorsairDataType\_StringArray
 
 ### CorsairDataValue
 
+```c
 union CorsairDataValue
+```
 
 **Description:** a union of all property data types
 
@@ -1040,7 +1137,9 @@ union CorsairDataValue
 
 ### CorsairProperty
 
+```c
 struct CorsairProperty
+```
 
 **Description:** contains information about device property type and value
 
@@ -1048,60 +1147,3 @@ struct CorsairProperty
 
 *   CorsairDataType type - type of property
 *   CorsairDataValue value - property value
-
-End User License Agreement
---------------------------
-
-On-Line End User License Agreement
-
-IMPORTANT: This End-User License Agreement ("EULA") is a legal Agreement between you and Corsair Components Inc., and any of its affiliates and/or subsidiaries ("CORSAIR") with respect to the software, SDKs and source code provided by CORSAIR, any associated media, printed materials, "online" documentation and electronic documentation (collectively referred to as "Software"). By installing, copying, or otherwise using the Software, you agree to be bound by the terms of this EULA. "You" and "Your" may refer to a natural person or to a legal entity including, but not limited to, a corporation, partnership or a limited liability company. If you do not agree to the terms of this EULA, you are not authorized to install or use the Software.
-
-1.  Ownership of Software.
-
-CORSAIR owns certain rights in the Software. THE SOFTWARE IS A PROPRIETARY PRODUCT OF CORSAIR OR THIRD PARTIES FROM WHOM CORSAIR HAS OBTAINED LICENSING RIGHTS. THE SOFTWARE IS PROTECTED BY COPYRIGHT LAWS AND OTHER INTELLECTUAL PROPERTY LAWS. TITLE TO THIS SOFTWARE, ANY COPY OF THIS SOFTWARE, AND ANY INTELLECTUAL PROPERTY RIGHTS IN THE SOFTWARE WILL AT ALL TIMES REMAIN WITH CORSAIR AND SUCH THIRD PARTIES. Your rights are defined by this Agreement which You agree creates a legally binding and valid contract. CORSAIR retains the right to utilize its affiliated companies, authorized distributors, authorized resellers and other third parties in pursuing any of its rights and fulfilling any of its obligations under this Agreement.
-
-2.  License Grant.
-
-CORSAIR grants to You a nonexclusive, nontransferable (except as may be required by applicable law) royalty-free license to allow You to use the Software.
-
-3.  Your Responsibilities and Prohibited Actions.
-
-(a) Transfer of Rights. You may not transfer or assign all or any portion of the Software, or any rights granted in this Agreement, to any other person.
-
-(b) Reverse Engineering or Modifying the Software. You will not reverse engineer, decompile, translate, disassemble, or otherwise attempt to discover the source code of the Software. The prohibition against modifying or reverse engineering the Software does not apply to the extent that You are allowed to do so by applicable law including, but not limited to, the European Union Directive on the Interoperability of Software or its implementing legislation in the member countries. You may not otherwise modify, alter, adapt, or merge the Software.
-
-(c) Third Party Supplier. You agree that CORSAIR's third party suppliers may enforce this Agreement as it relates to their Software directly against You.
-
-(d) Export. CORSAIR shall not be required to undertake any action pursuant to this Agreement that is prevented by any impediments arising out of national or international foreign trade or customs requirements, including embargoes or any other sanctions. This Agreement is subject to all United States government laws and regulations as may be enacted, amended or modified from time to time regarding the export from the United States of CORSAIR software, services, technology, or any derivatives thereof. You will not export or re-export any CORSAIR software, services, technology, or any derivatives thereof, or permit the shipment of same. This section will survive the expiration or termination of this Agreement for any reason.
-
-4.  Term and Termination.
-
-CORSAIR reserves the right to terminate this Agreement if You fail to comply with any of the terms described herein. All license rights granted will cease upon any termination of this Agreement.
-
-5.  Disclaimer of Warranty.
-
-CORSAIR MAKES NO WARRANTIES OF ANY KIND, AND NO WARRANTY IS GIVEN THAT THE SOFTWARE IS ERROR-FREE OR THAT ITS USE WILL BE UNINTERRUPTED OR THAT IT WILL WORK IN CONNECTION WITH ANY OTHER SOFTWARE. ALL WARRANTIES, CONDITIONS, REPRESENTATIONS, INDEMNITIES AND GUARANTEES, WHETHER EXPRESS OR IMPLIED, ARISING BY LAW, CUSTOM, PRIOR ORAL OR WRITTEN STATEMENTS (INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY OF MERCHANTABILITY OR FITNESS FOR PARTICULAR PURPOSE OR OF ERROR-FREE AND UNINTERRUPTED USE OR ANY WARRANTY AGAINST INFRINGEMENT) ARE HEREBY OVERRIDDEN, EXCLUDED AND DISCLAIMED, EXCEPT AS OTHERWISE EXPRESSLY STATED IN THIS LICENSE AGREEMENT.
-
-6.  Limitation of Liability.
-
-CORSAIR's entire liability for all claims or damages arising out of or related to this Agreement, regardless of the form of action, whether in contract, equity, negligence, intended conduct, tort or otherwise, will be limited to and will not exceed, in the aggregate for all claims, actions and causes of action of every kind and nature; the amount paid to CORSAIR for the specific item that caused the damage or that is the subject matter of the cause of action. In no event will the measure of damages payable by CORSAIR include, nor will CORSAIR be liable for, any amounts for loss of income, profit or savings or indirect, incidental, consequential, exemplary, punitive or special damages of any party, including third parties, even if CORSAIR has been advised of the possibility of such damages in advance, and all such damages are expressly disclaimed. This section shall not be interpreted to exclude any liability that is prohibited from being excluded by applicable law. Except as otherwise provided by applicable law, no claim, regardless of form, arising out of or in connection with this Agreement may be brought by You unless such claim is brought either (i) within two years after the cause of action has accrued or (ii) within the shortest period of time after the cause of action has accrued that may be legally contracted for in the applicable jurisdiction if a two year limitation would be legally unenforceable.
-
-7.  Software Support Services.
-
-CORSAIR offers technical support services. See www.corsair.com. Such technical support shall be provided in CORSAIR's sole discretion without any guarantee or warranty of any kind. It is your responsibility to back up of all your existing data, software and programs before receiving any technical support from CORSAIR. CORSAIR reserves the right to refuse, suspend or terminate any technical support, in its sole discretion.
-
-8.  Choice of Law and Jurisdiction.
-
-This Agreement will be governed by and construed in accordance with the substantive laws of the State of California in the United States, without giving effect to any choice-of-law rules that may require the application of the laws of another jurisdiction. This Agreement will not be governed by the United Nations Convention on Contracts for the International Sale of Goods, the application of which is expressly excluded. Any disputes arising under this Agreement shall be settled exclusively in the California state courts or United States federal courts located in California. The parties hereby submit to the personal jurisdiction of such courts for the purpose of resolving any dispute under this Agreement.
-
-9.  Severability/Reformation.
-
-If any provision of this Agreement is found to be void or unenforceable, it will not affect the validity of any other provision of this Agreement and those provisions will remain valid and enforceable according to their terms. To the extent that an unenforceable provision may be reformed to be enforceable by a court of law, such provision will be deemed to be so reformed in this Agreement.
-
-10.  Other Rights Reserved.
-
-All rights not specifically granted in this Agreement are reserved by CORSAIR.
-
-11.  Entire Agreement.
-
-You acknowledge that You have read this Agreement, understand it and agree to be bound by its terms and conditions. You further agree that it is the complete and exclusive statement of the agreement between us which supersedes any proposal or prior agreement, oral or written, and any other communications between us relating to the subject matter of this Agreement.
