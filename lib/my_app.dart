@@ -7,10 +7,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'manicue - iCUE Integration',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: const IcueDashboardScreen(),
+    // fix for: https://github.com/flutter/flutter/issues/182444
+    return ExcludeSemantics(
+      child: MaterialApp(
+        title: 'manicue - iCUE Integration',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: const IcueDashboardScreen(),
+      ),
     );
   }
 }

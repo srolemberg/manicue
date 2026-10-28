@@ -60,3 +60,4 @@ Binary files or DLLs must be registered in the project's pubspec and copied into
 5. Always use the `Local Reference Materials` as the primary source of truth.
 6. Never use magic numbers. Always use the constants defined by the library.
 7. In widgets, whenever an error is returned, preserve the complete error `print` to make the stack trace easier to inspect.
+8. Folders and files in `docs` should not be referenced in [README.md](README.md)`

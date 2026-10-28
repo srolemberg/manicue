@@ -58,10 +58,6 @@ flutter build windows
 
 - [Corsair iCUE SDK on GitHub](https://github.com/CorsairOfficial/cue-sdk)
 - [iCUE SDK 4.0.84 release](https://github.com/CorsairOfficial/cue-sdk/releases/tag/v4.0.84)
-- [iCUE SDK API reference](docs/iocue-sdk.md)
-- [Native Flutter integration notes](docs/docs.flutter.devplatform-integration.bind-native-code.md)
-- [Bundled iCUE SDK headers](docs/iCUESDK_4.0.84/iCUESDK/include/iCUESDK)
-- [Native integration example](docs/native_add)
 
 The SDK communicates with hardware through iCUE. Device support and available controls depend on the
 connected device and iCUE settings.
@@ -78,4 +74,4 @@ Corsair, its products, services, or SDK.
 ## License
 
 Original **_manicue_** project code is licensed under the [MIT License](LICENSE). Third-party materials,
-including the Corsair iCUE SDK files, remain subject to their respective owners' terms and licenses.
+including the Corsair iCUE SDK files, remain subject to their respective owners terms and licenses.
